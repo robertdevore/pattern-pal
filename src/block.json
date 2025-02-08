@@ -1,0 +1,12 @@
+{
+    "apiVersion": 2,
+    "name": "pattern-pal/pattern-generator",
+    "title": "Pattern Pal - Pattern Generator",
+    "category": "design",
+    "icon": "art",
+    "editorScript": "file:./index.js",
+    "attributes": {
+        "prompt": { "type": "string", "default": "" },
+        "generatedPattern": { "type": "string", "default": "" }
+    }
+}

@@ -1,0 +1,59 @@
+<?php
+/**
+ * Plugin Name:       Pattern Pal
+ * Plugin URI:        https://robertdevore.com
+ * Description:       Generate custom WordPress® block patterns using OpenAI AI.
+ * Version:           1.0
+ * Author:            Robert DeVore
+ * Author URI:        https://robertdevore.com
+ * License:           GPL-3.0+
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       pattern-pal
+ * Domain Path:       /languages
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit; // Exit if accessed directly
+}
+
+// Load dependencies
+require_once plugin_dir_path( __FILE__ ) . 'includes/admin-settings.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/api-handler.php';
+require_once plugin_dir_path( __FILE__ ) . 'includes/block-inserter.php';
+
+/**
+ * Enqueues editor assets for the block editor.
+ *
+ * @since  1.0.0
+ * @return void
+ */
+function pattern_pal_enqueue_editor_assets() {
+    // Ensure we're in the block editor.
+    if ( ! is_admin() ) {
+        return;
+    }
+
+    wp_enqueue_script(
+        'pattern-pal-block-editor',
+        plugin_dir_url( __FILE__ ) . 'build/index.js',
+        [ 'wp-blocks', 'wp-editor', 'wp-components', 'wp-data', 'wp-element' ],
+        filemtime( plugin_dir_path( __FILE__ ) . 'build/index.js' ),
+        true
+    );
+
+    // Debugging: Check if this is running.
+    if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+        error_log( 'pattern_pal_enqueue_editor_assets() is running.' );
+    }
+
+    // Pass AJAX URL and nonce securely.
+    wp_localize_script(
+        'pattern-pal-block-editor',
+        'patternpalNonce',
+        [
+            'nonce'   => wp_create_nonce( 'pattern_pal_nonce' ),
+            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+        ]
+    );
+}
+add_action( 'enqueue_block_editor_assets', 'pattern_pal_enqueue_editor_assets' );
