@@ -10,16 +10,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Get the current theme's color palette from theme.json.
  *
+ * @since  1.0.0
  * @return array Associative array of color names and their hex values.
  */
 function pattern_pal_get_theme_colors() {
-    $theme_json = wp_get_global_settings( array( 'color', 'palette' ) );
+    $theme_json = wp_get_global_settings( [ 'color', 'palette' ] );
 
     if ( empty( $theme_json ) || ! isset( $theme_json['theme'] ) ) {
-        return array(); // Return empty if no colors found
+        return []; // Return empty if no colors found
     }
 
-    $colors = array();
+    $colors = [];
     
     foreach ( $theme_json['theme'] as $color ) {
         if ( isset( $color['slug'], $color['color'] ) ) {
@@ -43,10 +44,10 @@ function pattern_pal_generate_pattern( $prompt ) {
         return new WP_Error( 'no_api_key', __( 'No API key found.', 'pattern-pal' ) );
     }
 
-    $theme_name  = wp_get_theme()->get( 'Name' );
+    $theme_name   = wp_get_theme()->get( 'Name' );
     $theme_colors = pattern_pal_get_theme_colors();
 
-    $color_info = "";
+    $color_info = '';
     if ( ! empty( $theme_colors ) ) {
         $color_info = "The theme uses the following colors:\n";
         foreach ( $theme_colors as $slug => $hex ) {
@@ -57,10 +58,10 @@ function pattern_pal_generate_pattern( $prompt ) {
 
     $api_url = 'https://api.openai.com/v1/chat/completions';
 
-    $request_body = wp_json_encode( array(
+    $request_body = wp_json_encode( [
         'model'    => 'gpt-4o',
-        'messages' => array(
-            array(
+        'messages' => [
+            [
                 'role'    => 'system',
                 'content' => sprintf(
                     "You are an AI that generates valid WordPress block patterns. 
@@ -76,27 +77,27 @@ function pattern_pal_generate_pattern( $prompt ) {
                     esc_html( $theme_name ),
                     esc_html( $color_info )
                 ),
-            ),
-            array(
+            ],
+            [
                 'role'    => 'user',
                 'content' => sanitize_text_field( $prompt ),
-            ),
-        ),
+            ],
+        ],
         'max_tokens'  => 2000,
         'temperature' => 0.2,
-    ) );
+    ] );
 
     $response = wp_remote_post(
         $api_url,
-        array(
+        [
             'timeout'   => 60,
             'sslverify' => false,
-            'headers'   => array(
+            'headers'   => [
                 'Authorization' => 'Bearer ' . sanitize_text_field( $api_key ),
                 'Content-Type'  => 'application/json',
-            ),
+            ],
             'body'      => $request_body,
-        )
+        ]
     );
 
     if ( is_wp_error( $response ) ) {
@@ -118,7 +119,12 @@ function pattern_pal_generate_pattern( $prompt ) {
     return wp_kses_post( $pattern );
 }
 
-
+/**
+ * Summary of pattern_pal_ajax_generate_pattern
+ * 
+ * @since  1.0.0
+ * @return void
+ */
 function pattern_pal_ajax_generate_pattern() {
     if ( ! check_ajax_referer( 'pattern_pal_nonce', 'security', false ) ) {
         wp_send_json_error( [ 'message' => __( 'Security check failed.', 'pattern-pal' ) ], 403 );

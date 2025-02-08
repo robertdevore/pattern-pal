@@ -10,6 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Adds a settings menu page.
  *
+ * @since  1.0.0
  * @return void
  */
 function pattern_pal_add_admin_menu() {
@@ -26,20 +27,22 @@ add_action( 'admin_menu', 'pattern_pal_add_admin_menu' );
 /**
  * Registers Pattern Pal settings.
  *
+ * @since  1.0.0
  * @return void
  */
 function pattern_pal_register_settings() {
-    register_setting( 'pattern_pal_ai_settings', 'pattern_pal_api_key', array(
+    register_setting( 'pattern_pal_ai_settings', 'pattern_pal_api_key', [
         'type'              => 'string',
         'sanitize_callback' => 'sanitize_text_field',
         'default'           => '',
-    ) );
+    ] );
 }
 add_action( 'admin_init', 'pattern_pal_register_settings' );
 
 /**
  * Renders the Pattern Pal settings page.
  *
+ * @since  1.0.0
  * @return void
  */
 function pattern_pal_settings_page() {

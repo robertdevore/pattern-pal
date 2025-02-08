@@ -20,11 +20,11 @@ function pattern_pal_register_block_pattern( $pattern_content ) {
 
     register_block_pattern(
         $pattern_id,
-        array(
+        [
             'title'      => esc_html__( 'Pattern Pal', 'pattern-pal' ),
-            'categories' => array( 'patterns' ),
+            'categories' => [ 'patterns' ],
             'content'    => wp_kses_post( $pattern_content ), // Sanitize the pattern content
-        )
+        ]
     );
 
     return $pattern_id;
