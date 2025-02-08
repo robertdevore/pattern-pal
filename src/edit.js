@@ -52,7 +52,7 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                 value={attributes.prompt}
                 onChange={(val) => setAttributes({ prompt: val })}
             />
-            <Button onClick={generatePattern} disabled={loading}>
+            <Button variant="primary" onClick={generatePattern} disabled={loading}>
                 {loading ? 'Generating...' : 'Generate'}
             </Button>
         </div>

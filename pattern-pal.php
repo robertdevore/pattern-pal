@@ -1,15 +1,25 @@
 <?php
+
 /**
- * Plugin Name:       Pattern Pal
- * Plugin URI:        https://robertdevore.com
- * Description:       Generate custom WordPress® block patterns using OpenAI AI.
- * Version:           1.0
- * Author:            Robert DeVore
- * Author URI:        https://robertdevore.com
- * License:           GPL-3.0+
- * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       pattern-pal
- * Domain Path:       /languages
+ * The plugin bootstrap file.
+ *
+ * @link              https://pluginpal.app/
+ * @since             1.0.0
+ * @package           Pattern_Pal
+ *
+ * @wordpress-plugin
+ *
+ * Plugin Name: Pattern Pal
+ * Description: Generate custom WordPress® block patterns with AI.
+ * Plugin URI:  https://github.com/robertdevore/pattern-pal/
+ * Version:     1.0.0
+ * Author:      Plugin Pal
+ * Author URI:  https://pluginpal.app/
+ * License:     GPL-3.0+
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.txt
+ * Text Domain: pattern-pal
+ * Domain Path: /languages
+ * Update URI:  https://github.com/robertdevore/pattern-pal/
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
