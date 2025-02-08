@@ -48,7 +48,15 @@ add_action( 'admin_init', 'pattern_pal_register_settings' );
 function pattern_pal_settings_page() {
     ?>
     <div class="wrap">
-        <h1><?php esc_html_e( 'Pattern Pal Settings', 'pattern-pal' ); ?></h1>
+        <h1>
+            <?php esc_html_e( 'Pattern Pal Settings', 'pattern-pal' ); ?>
+            <a id="pattern-pal-support-btn" href="https://pluginpal.app/contact/" target="_blank" class="button button-alt" style="margin-left: 10px;">
+                <span class="dashicons dashicons-format-chat" style="vertical-align: middle;"></span> <?php esc_html_e( 'Support', 'pattern-pal' ); ?>
+            </a>
+            <a id="pattern-pal-docs-btn" href="https://robertdevore.com/articles/pattern-pal/" target="_blank" class="button button-alt" style="margin-left: 5px;">
+                <span class="dashicons dashicons-media-document" style="vertical-align: middle;"></span> <?php esc_html_e( 'Documentation', 'pattern-pal' ); ?>
+            </a>
+        </h1>
         <form method="post" action="options.php">
             <?php 
                 settings_fields( 'pattern_pal_ai_settings' ); 

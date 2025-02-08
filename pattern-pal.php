@@ -26,6 +26,9 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
 
+// Set the current version.
+define( 'PATTERN_PAL_VERSION', '1.0.0' );
+
 require 'vendor/plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
@@ -53,6 +56,17 @@ require_once plugin_dir_path( __FILE__ ) . 'includes/api-handler.php';
 require_once plugin_dir_path( __FILE__ ) . 'includes/block-inserter.php';
 
 /**
+ * Load plugin text domain for localization.
+ *
+ * @since  1.0.0
+ * @return void
+ */
+function pattern_pal_load_textdomain() {
+    load_plugin_textdomain( 'pattern-pal', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+}
+add_action( 'plugins_loaded', 'pattern_pal_load_textdomain' );
+
+/**
  * Enqueues editor assets for the block editor.
  *
  * @since  1.0.0
@@ -68,7 +82,7 @@ function pattern_pal_enqueue_editor_assets() {
         'pattern-pal-block-editor',
         plugin_dir_url( __FILE__ ) . 'build/index.js',
         [ 'wp-blocks', 'wp-editor', 'wp-components', 'wp-data', 'wp-element' ],
-        filemtime( plugin_dir_path( __FILE__ ) . 'build/index.js' ),
+        PATTERN_PAL_VERSION,
         true
     );
 
@@ -88,3 +102,17 @@ function pattern_pal_enqueue_editor_assets() {
     );
 }
 add_action( 'enqueue_block_editor_assets', 'pattern_pal_enqueue_editor_assets' );
+
+/**
+ * Enqueue admin styles.
+ * 
+ * @since  1.0.0
+ * @return void
+ */
+function pattern_pal_enqueue_admin_styles( $hook ) {
+    if ( $hook !== 'settings_page_pattern-pal-settings' ) {
+        return;
+    }
+    wp_enqueue_style( 'pattern-pal-admin-css', plugin_dir_url( __FILE__ ) . 'assets/css/admin-settings.css', [], PATTERN_PAL_VERSION );
+}
+add_action( 'admin_enqueue_scripts', 'pattern_pal_enqueue_admin_styles' );
