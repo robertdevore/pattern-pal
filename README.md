@@ -56,4 +56,4 @@ Absolutely! You can edit the generated pattern like any other block in Gutenberg
 
 ### 4. Does Pattern Pal store my API key securely?
 
-Yes, your API key is stored securely in the WordPress options table.
+Yes, your API key is stored securely in the WordPress® options table.

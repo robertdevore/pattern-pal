@@ -10,7 +10,7 @@
  * @wordpress-plugin
  *
  * Plugin Name: Pattern Pal
- * Description: Generate custom WordPress® block patterns with AI.
+ * Description: Generate custom WordPress® block patterns with AI
  * Plugin URI:  https://github.com/robertdevore/pattern-pal/
  * Version:     1.0.0
  * Author:      Plugin Pal
