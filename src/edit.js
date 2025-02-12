@@ -2,16 +2,18 @@ import { useState } from '@wordpress/element';
 import { Button, TextControl } from '@wordpress/components';
 import { useBlockProps } from '@wordpress/block-editor';
 import apiFetch from '@wordpress/api-fetch';
-import { dispatch } from '@wordpress/data';
+import { dispatch, useDispatch } from '@wordpress/data';
 
 export default function Edit({ attributes, setAttributes, clientId }) {
     const [loading, setLoading] = useState(false);
     const blockProps = useBlockProps();
+    // Destructure createNotice from the core/notices store.
+    const { createNotice } = useDispatch( 'core/notices' );
 
     function generatePattern() {
         setLoading(true);
         apiFetch({
-            url: patternpalNonce.ajaxurl, // Ensure correct AJAX URL
+            url: patternpalNonce.ajaxurl,
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({
@@ -19,29 +21,61 @@ export default function Edit({ attributes, setAttributes, clientId }) {
                 security: patternpalNonce.nonce,
                 prompt: attributes.prompt
             })
-        }).then(response => {
+        })
+        .then(response => {
             setLoading(false);
             if (response.success) {
                 // Replace the block with the generated pattern
                 insertBlockPattern(response.data.pattern);
             } else {
-                alert('Error: ' + response.data.message);
+                // Check if the error is due to a missing API key.
+                if (response.data.message && response.data.message.includes('No API key')) {
+                    createNotice(
+                        'error',
+                        'No API key found. Please add your OpenAI API key in the Pattern Pal settings.',
+                        {
+                            isDismissible: true,
+                            actions: [
+                                {
+                                    label: 'Go to Settings',
+                                    onClick: () => {
+                                        window.location.href = patternpalNonce.settingsUrl;
+                                    }
+                                }
+                            ]
+                        }
+                    );
+                } else {
+                    // For any other errors, show a simple error notice.
+                    createNotice('error', 'Error: ' + response.data.message, { isDismissible: true });
+                }
             }
-        }).catch(error => {
+        })
+        .catch(error => {
             setLoading(false);
             console.error("AJAX Error:", error);
-            alert('AJAX Request Failed');
+            createNotice(
+                'error',
+                'The request failed. It appears your OpenAI API key may be missing or invalid. Please add your key in the Pattern Pal settings.',
+                {
+                    isDismissible: true,
+                    actions: [
+                        {
+                            label: 'Go to Settings',
+                            onClick: () => {
+                                window.location.href = patternpalNonce.settingsUrl;
+                            }
+                        }
+                    ]
+                }
+            );
         });
     }
 
     function insertBlockPattern(pattern) {
-        // Replace this block with the new block pattern
+        // Replace this block with the new block pattern.
         const { removeBlock, insertBlocks } = dispatch('core/block-editor');
-
-        // Remove the existing block
         removeBlock(clientId);
-
-        // Insert the new block pattern
         insertBlocks(wp.blocks.parse(pattern));
     }
 

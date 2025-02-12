@@ -96,8 +96,9 @@ function pattern_pal_enqueue_editor_assets() {
         'pattern-pal-block-editor',
         'patternpalNonce',
         [
-            'nonce'   => wp_create_nonce( 'pattern_pal_nonce' ),
-            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+            'nonce'       => wp_create_nonce( 'pattern_pal_nonce' ),
+            'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+            'settingsUrl' => admin_url( 'options-general.php?page=pattern-pal-settings' ),
         ]
     );
 }
