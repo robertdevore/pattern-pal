@@ -149,3 +149,22 @@ function pattern_pal_redirect_after_activation() {
     }
 }
 add_action( 'admin_init', 'pattern_pal_redirect_after_activation' );
+
+/**
+ * Add a Settings link on the Plugins screen.
+ *
+ * @param array $links Array of plugin action links.
+ * 
+ * @since  1.1.0
+ * @return array Modified array with our Settings link added.
+ */
+function pattern_pal_add_plugin_action_links( $links ) {
+    $settings_link = sprintf(
+        '<a href="%s">%s</a>',
+        esc_url( admin_url( 'options-general.php?page=pattern-pal-settings' ) ),
+        esc_html__( 'Settings', 'pattern-pal' )
+    );
+    array_unshift( $links, $settings_link );
+    return $links;
+}
+add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'pattern_pal_add_plugin_action_links' );
