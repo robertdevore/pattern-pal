@@ -117,3 +117,35 @@ function pattern_pal_enqueue_admin_styles( $hook ) {
     wp_enqueue_style( 'pattern-pal-admin-css', plugin_dir_url( __FILE__ ) . 'assets/css/admin-settings.css', [], PATTERN_PAL_VERSION );
 }
 add_action( 'admin_enqueue_scripts', 'pattern_pal_enqueue_admin_styles' );
+
+/**
+ * Runs on plugin activation.
+ *
+ * @since  1.1.0
+ * @return void
+ */
+function pattern_pal_activation() {
+    // Set a transient flag to trigger the redirect.
+    set_transient( 'pattern_pal_activation_redirect', true, 30 );
+}
+register_activation_hook( __FILE__, 'pattern_pal_activation' );
+
+/**
+ * Redirects to the settings page on first load after activation.
+ *
+ * @since  1.1.0
+ * @return void
+ */
+function pattern_pal_redirect_after_activation() {
+    // Check if our redirect transient is set.
+    if ( get_transient( 'pattern_pal_activation_redirect' ) ) {
+        // Delete the transient so the redirect only happens once.
+        delete_transient( 'pattern_pal_activation_redirect' );
+        // Do not redirect on bulk activation.
+        if ( ! isset( $_GET['activate-multi'] ) ) {
+            wp_redirect( admin_url( 'options-general.php?page=pattern-pal-settings' ) );
+            exit;
+        }
+    }
+}
+add_action( 'admin_init', 'pattern_pal_redirect_after_activation' );
