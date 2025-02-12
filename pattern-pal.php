@@ -12,7 +12,7 @@
  * Plugin Name: Pattern Pal
  * Description: Generate custom WordPress® block patterns with AI
  * Plugin URI:  https://github.com/robertdevore/pattern-pal/
- * Version:     1.0.0
+ * Version:     1.1.0
  * Author:      Plugin Pal
  * Author URI:  https://pluginpal.app/
  * License:     GPL-3.0+
@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Set the current version.
-define( 'PATTERN_PAL_VERSION', '1.0.0' );
+define( 'PATTERN_PAL_VERSION', '1.1.0' );
 
 require 'vendor/plugin-update-checker/plugin-update-checker.php';
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
